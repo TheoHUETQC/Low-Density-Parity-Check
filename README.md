@@ -18,25 +18,22 @@ An LDPC code adds *parity-check bits* to your data bits in such a way that certa
 Each parity check only involves a *few* bits (that’s the “low-density” part).  
 If some bits flip due to noise, we can use these parity constraints to detect and often correct the errors.
 
-Mathematically, an LDPC code is defined by a **parity-check matrix** \(H\):
+Mathematically, an LDPC code is defined by a **parity-check matrix** $`H`$:
 
-\[
+$`
 H \cdot c^T = 0 \pmod{2}
-\]
+`$
 
-- each **row** of \(H\) represents one parity-check equation,  
+- each **row** of $`H`$ represents one parity-check equation,  
 - each **column** corresponds to one bit of the codeword,  
-- and a `1` in position \(H_{ij}\) means that bit *j* participates in parity check *i*.
-
-In other words:  
-> “LDPC is just a clever way of connecting bits and parity checks in a sparse network.”
+- and a `1` in position $`H_{ij}`$ means that bit *j* participates in parity check *i*.
 
 ---
 
 ## ⚙️ What This Project Does
 
-1. **Defines** a small, sparse parity-check matrix \(H\)  
-2. **Derives** the generator matrix \(G\) to encode messages  
+1. **Defines** a small, sparse parity-check matrix $`H`$  
+2. **Derives** the generator matrix $`G`$ to encode messages  
 3. **Simulates** a noisy channel (like a Binary Symmetric Channel)  
 4. **Attempts** to decode and correct errors using a simple belief propagation or min-sum method  
 5. **Evaluates** the error-correction performance
@@ -62,5 +59,10 @@ It’s a conceptual and educational exercise: **LDPC from scratch, with NumPy an
 ## 🚀 How to Run
 
 ```bash
-python classical/main.py
+python classic/ldpc-demo.py
 ```
+
+---
+
+## References
+- http://dspace.univ-bouira.dz:8080/jspui/bitstream/123456789/2163/1/mémoire.pdf
