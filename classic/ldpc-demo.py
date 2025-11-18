@@ -1,16 +1,6 @@
 import numpy as np
-
-#---------------- parametre ----------------#
-
-NBR_BIT = 8 #taille du message que l'on envoie
-
-#---------------- utils ----------------#
-
-def mod2(x) :
-    return x % 2
-
-def bitflip(b) :
-    return mod2(b+1)
+from utils import mod2
+from noise import simplest_noise
 
 #---------------- encode ----------------#
 
@@ -54,23 +44,40 @@ def find_error(syndrome):
 
 #---------------- main ----------------#
 
-message = np.array([1,0,1,1,0,0,1,0])
-print("message  :", message)
+print("One exemple step by step :")
 
-#on encode notre message pour le rendre plus robuste
+# Generate a message of 8 random bits
+message = np.random.randint(2, size=8)
+print("message   :", message)
+
+# We encode our message to make it more robust
 encoded_message = encode(message)
-print("encodé   :",encoded_message)
+print("encoded   :",encoded_message)
 
-# Ajout d'un bruit simple aléatoirement (1 bit d'erreur)
-message_received = np.copy(encoded_message)
-noise_pos = np.random.randint(0, NBR_BIT)
-message_received[noise_pos] = bitflip(encoded_message[noise_pos])  
-print("Reçu     :", message_received)
+# Noise is applied
+message_received = simplest_noise(encoded_message)
+print("Received  :", message_received)
 
-# On cherche ou est l erreur
+# We are looking for the error
 s = syndrome(message_received)
 pos = find_error(s)
 
 # Correction
-message_received[pos] = bitflip(message_received[pos])  
-print("corrigé  :", message_received)
+message_received[pos] = mod2(message_received[pos]+1)  
+print("corrected :", message_received)
+
+# Final message
+print("final     :", message_received[:8])
+
+# Testing the method on N messages
+N = 1000
+result = []
+for i in range(N) :
+    message = np.random.randint(2, size=8)
+    message_received = simplest_noise(encode(message))
+    s = syndrome(message_received)
+    pos = find_error(s)
+    message_received[pos] = mod2(message_received[pos]+1) 
+    result.append(np.array_equal(message, message_received[:8]))
+
+print("Testing the method on N messages :",np.sum(result),"/",N,"are corrected correctly")
