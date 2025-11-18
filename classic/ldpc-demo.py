@@ -70,14 +70,22 @@ print("corrected :", message_received)
 print("final     :", message_received[:8])
 
 # Testing the method on N messages
-N = 1000
-result = []
+N = 10000
+result = 0
 for i in range(N) :
     message = np.random.randint(2, size=8)
     message_received = simplest_noise(encode(message))
     s = syndrome(message_received)
     pos = find_error(s)
     message_received[pos] = mod2(message_received[pos]+1) 
-    result.append(np.array_equal(message, message_received[:8]))
+    result += np.array_equal(message, message_received[:8])
 
-print("Testing the method on N messages :",np.sum(result),"/",N,"are corrected correctly")
+print("Testing the method on N messages :",result,"/",N,"are corrected correctly")
+
+""" Commmentaire : 
+55-60 % de réussite
+On obtient un resultat peu satisfaisant pour cette methode 
+on n a pas de distance minimale suffisante pour corriger toutes les erreurs d un seul bit
+deux positions différentes peuvent produire le même syndrome
+la matrice construite a la main n'est pas optimal ( a voir plus tard ) 
+et code ldpc puissant pour de grandes chaine de bits ( a faire et tester plus tard également )"""
